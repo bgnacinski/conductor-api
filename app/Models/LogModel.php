@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Entities\LogEntry;
 use CodeIgniter\Model;
 
-class Log extends Model
+class LogModel extends Model
 {
-    protected $table            = 'logs';
+    protected $table            = 'log';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
+    protected $returnType       = LogEntry::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id', 'action_type', 'client_fingerprint', 'gate_id', 'action_date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,14 +22,20 @@ class Log extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $updatedField  = '';
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        'id' => 'required|max_length[100]|is_unique[log.id]',
+        'action_type' => 'required|in_list[entry,exit]',
+        'action_date' => 'required|valid_date',
+        'client_fingerprint' => 'required|max_length[100]',
+        'gate_id' => 'required|max_length[100]|is_not_unique[gates.id]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

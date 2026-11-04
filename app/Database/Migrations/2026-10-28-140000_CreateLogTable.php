@@ -10,9 +10,9 @@ class CreateLogTable extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type'           => 'int',
-                'constraint'     => 11,
-                'auto_increment' => true,
+                'type'           => 'varchar',
+                'constraint'     => 100,
+                'unique'         => true,
                 'null'           => false,
             ],
             'action_type' => [

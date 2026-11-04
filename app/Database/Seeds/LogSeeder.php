@@ -12,6 +12,7 @@ class LogSeeder extends Seeder
 
         $logs = [
             [
+                'id'                 => sha1(random_bytes(16)),
                 'action_type'        => 'entry',
                 'client_fingerprint' => sha1('client-001'),
                 'gate_id'            => 'A_1_01',
@@ -20,6 +21,7 @@ class LogSeeder extends Seeder
                 'deleted_at'         => null,
             ],
             [
+                'id'                 => sha1(random_bytes(16)),
                 'action_type'        => 'exit',
                 'client_fingerprint' => sha1('client-001'),
                 'gate_id'            => 'B_2_02',
@@ -28,6 +30,7 @@ class LogSeeder extends Seeder
                 'deleted_at'         => null,
             ],
             [
+                'id'                 => sha1(random_bytes(16)),
                 'action_type'        => 'entry',
                 'client_fingerprint' => sha1('client-002'),
                 'gate_id'            => 'C_3_03',
@@ -36,6 +39,7 @@ class LogSeeder extends Seeder
                 'deleted_at'         => null,
             ],
             [
+                'id'                 => sha1(random_bytes(16)),
                 'action_type'        => 'exit',
                 'client_fingerprint' => sha1('client-002'),
                 'gate_id'            => 'D_4_04',
@@ -44,6 +48,7 @@ class LogSeeder extends Seeder
                 'deleted_at'         => null,
             ],
             [
+                'id'                 => sha1(random_bytes(16)),
                 'action_type'        => 'entry',
                 'client_fingerprint' => sha1('client-003'),
                 'gate_id'            => 'E_5_05',
