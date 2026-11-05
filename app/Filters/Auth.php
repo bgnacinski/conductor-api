@@ -27,7 +27,16 @@ class Auth implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $auth_header = $request->header('Authorization');
-        $auth_key = explode(' ', $auth_header->getValue(), 3)[1];
+        try {
+            $header_val = $auth_header->getValue();
+            $auth_key = explode(' ', $header_val, 3)[1];
+        }
+        catch (\Throwable){
+            $response = response()->setStatusCode(403);
+            $response->setJSON(['error' => 'Unauthorized']);
+
+            return $response;
+        }
 
         $gate_model = new Gate();
         $gate = $gate_model->where('auth_key', $auth_key)->first();

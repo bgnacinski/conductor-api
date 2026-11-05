@@ -5,7 +5,6 @@ namespace App\Controllers\Api;
 use App\Entities\LogEntry;
 use App\Models\LogModel;
 use CodeIgniter\API\ResponseTrait;
-use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
