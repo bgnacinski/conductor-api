@@ -20,7 +20,7 @@ class CreateLogTable extends Migration
                 'constraint' => ['entry', 'exit'],
                 'null'       => false,
             ],
-            'client_fingerprint' => [
+            'card_fingerprint' => [
                 'type'       => 'varchar',
                 'constraint' => 100,
                 'null'       => false,
@@ -46,6 +46,7 @@ class CreateLogTable extends Migration
 
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('gate_id', 'gates', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey("card_fingerprint", "fare_cards", "fingerprint", "CASCADE", "CASCADE");
         $this->forge->createTable('log');
     }
 
