@@ -7,7 +7,7 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Auth implements FilterInterface
+class GateAuth implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
