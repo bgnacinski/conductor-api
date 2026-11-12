@@ -2,12 +2,12 @@
 
 namespace App\Filters;
 
-use App\Models\Gate;
+use App\Models\GateModel;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Auth implements FilterInterface
+class GateAuth implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -38,7 +38,7 @@ class Auth implements FilterInterface
             return $response;
         }
 
-        $gate_model = new Gate();
+        $gate_model = new GateModel();
         $gate = $gate_model->where('auth_key', $auth_key)->first();
 
         if($gate){

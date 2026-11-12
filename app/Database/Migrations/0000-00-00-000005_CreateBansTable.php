@@ -16,9 +16,10 @@ class CreateBansTable extends Migration
                 'unique'         => true,
                 'null'           => false,
             ],
-            'client_fingerprint' => [
-                'type'       => 'varchar',
-                'constraint' => 100,
+            'client_id' => [
+                'type'       => 'int',
+                'constraint' => 11,
+                "unsigned"    => true,
                 'null'       => false,
             ],
             'created_at' => [
@@ -32,6 +33,7 @@ class CreateBansTable extends Migration
         ]);
 
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey("client_id", "clients", "id", "CASCADE", "CASCADE");
         $this->forge->createTable('bans');
     }
 
