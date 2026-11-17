@@ -17,7 +17,7 @@ $routes->group("api", function($routes){
         $routes->get("/", "Api\Card::index");
         $routes->get("/(:segment)", "Api\Card::show/$1");
         # ...
-        $routes->post("issue", "Api\Card::issue");
+        $routes->post("issue", "Api\Card::create");
     });
 
     $routes->group("logs", function($routes){

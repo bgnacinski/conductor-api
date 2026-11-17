@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Models\CardModel;
+use App\Services\FareCardService;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -71,7 +72,7 @@ class Card extends ResourceController
     }
 
     # this should show data about requested fare card - requires more advanced access control
-   public function show($id = null): ResponseInterface{
+    public function show($id = null): ResponseInterface{
         if(empty($id)){
             return $this->response->setStatusCode(ResponseInterface::HTTP_NOT_FOUND);
         }
@@ -94,7 +95,61 @@ class Card extends ResourceController
         }
 
         return $this->response;
-   }
+    }
+
+    public function create(){
+        # create certificate (and keypair? - yes) for the new card
+        # this endpoint is meant to be used by administrative users so they need to pass who the card will belong to
+        $client_id = $this->request->getPost("client_id");
+        $valid_for = $this->request->getPost("valid_for");
+
+        if(empty($client_id) or empty($valid_for) or !is_numeric($client_id) or !is_numeric($valid_for)){
+            $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST);
+            $this->response->setJSON([
+                "status" => "error",
+                "message" => "client_id and valid_for are required and have to be numeric"
+            ]);
+
+            return $this->response;
+        }
+
+        $service = new FareCardService($client_id);
+        [$card_privkey, $card_pubkey] = $service->generateKeys();
+
+        $new_card = [
+            "client_id" => $client_id,
+            "fingerprint" => $service->sshFingerprint($card_pubkey)
+        ];
+
+        $model = new CardModel();
+        try {
+            $model->insert($new_card);
+            $card_id = $model->db->insertID();
+
+        } catch(\ReflectionException $e) {
+            $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+            $this->response->setJSON([
+                "status" => "save_err",
+            ]);
+
+            return $this->response;
+        }
+
+        $cert = $service->issueCard($card_pubkey, $valid_for, $card_id);
+
+        $this->response->setStatusCode(ResponseInterface::HTTP_CREATED);
+        $this->response->setJSON([
+            "status" => "success",
+            "data" => [
+                "card_id" => $card_id,
+                "card_pubkey" => base64_encode($card_pubkey->toString("OpenSSH")),
+                "card_privkey" => base64_encode($card_privkey->toString("OpenSSH")),
+                "card_cert" => base64_encode($cert),
+            ]
+        ]);
+
+        return $this->response;
+    }
 
     #returns CA's pubkey
     public function ca_pubkey(): ResponseInterface{
