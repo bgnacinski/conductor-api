@@ -29,7 +29,7 @@ class Log extends ResourceController
         }
     }
 
-    public function store(){
+    public function store(): ResponseInterface{
         $incoming_json = $this->request->getJSON(true);
         $data = $incoming_json["data"];
         $bulk = $incoming_json["bulk"];
@@ -52,7 +52,7 @@ class Log extends ResourceController
                 $new_entry = new LogEntry();
                 $new_entry->id = $entry["id"];
                 $new_entry->gate_id = $gate_id;
-                $new_entry->client_fingerprint = $entry["client_fingerprint"];
+                $new_entry->card_fingerprint = $entry["client_fingerprint"];
                 $new_entry->action_type = $entry["action_type"];
                 $new_entry->action_date = $entry["created_at"];
 
@@ -76,6 +76,13 @@ class Log extends ResourceController
                     $this->response->setStatusCode(ResponseInterface::HTTP_CREATED);
                     $this->response->setJSON([
                         "status" => "success",
+                    ]);
+                }
+                else{
+                    $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+                    $this->response->setJSON([
+                        "status" => "save_err",
+                        "errors" => $model->errors()
                     ]);
                 }
             }
@@ -137,7 +144,7 @@ class Log extends ResourceController
             $new_entry = new LogEntry();
             $new_entry->id = $data["id"];
             $new_entry->gate_id = $gate_id;
-            $new_entry->client_fingerprint = $data["client_fingerprint"];
+            $new_entry->card_fingerprint = $data["client_fingerprint"];
             $new_entry->action_type = $data["action_type"];
             $new_entry->action_date = $data["created_at"];
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Gate extends Model
+class GateModel extends Model
 {
     protected $table            = 'gates';
     protected $primaryKey       = 'id';

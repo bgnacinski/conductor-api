@@ -13,7 +13,7 @@ class LogModel extends Model
     protected $returnType       = LogEntry::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id', 'action_type', 'client_fingerprint', 'gate_id', 'action_date'];
+    protected $allowedFields    = ['id', 'action_type', 'card_fingerprint', 'gate_id', 'action_date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -33,7 +33,7 @@ class LogModel extends Model
         'id' => 'required|max_length[100]|is_unique[log.id]',
         'action_type' => 'required|in_list[entry,exit]',
         'action_date' => 'required|valid_date',
-        'client_fingerprint' => 'required|max_length[100]',
+        'card_fingerprint' => 'required|max_length[100]|is_not_unique[fare_cards.fingerprint]',
         'gate_id' => 'required|max_length[100]|is_not_unique[gates.id]',
     ];
     protected $validationMessages   = [];

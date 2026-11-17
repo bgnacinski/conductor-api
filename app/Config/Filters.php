@@ -2,7 +2,7 @@
 
 namespace Config;
 
-use App\Filters\Auth;
+use App\Filters\GateAuth;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -35,7 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
-        'auth'          => Auth::class,
+        'gate-auth'     => GateAuth::class,
     ];
 
     /**
